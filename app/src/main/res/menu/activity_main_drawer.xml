@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+    >
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:icon="@drawable/usuarios"
+            android:title="Inicio"
+            />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_producto"
+            android:icon="@drawable/producto"
+            android:title="Productos" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_ordenes"
+            android:icon="@drawable/marca"
+            android:title="Ordenes" />
+        <item
+            android:id="@+id/nav_transacciones"
+            android:icon="@drawable/movimiento"
+            android:title="Transacciones"
+            />
+        <item
+            android:id="@+id/nav_recetas"
+            android:icon="@drawable/receta"
+            android:title="Recetas"
+            />
+        <item
+            android:id="@+id/nav_inventariofisico"
+            android:icon="@drawable/subcategoria"
+            android:title="Inventario Fisico"
+            />
+        <item
+            android:id="@+id/nav_reportes"
+            android:icon="@drawable/reporte"
+            android:title="Reportes"
+            />
     </group>
 </menu>

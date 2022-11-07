@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         val nombre = intent.extras
         val nombreobtenido = nombre?.getString("nombre").toString()
 
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_producto, R.id.nav_ordenes, R.id.nav_transacciones, R.id.nav_recetas, R.id.nav_inventariofisico, R.id.nav_reportes
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -54,9 +53,9 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val header: View = navigationView.getHeaderView(0)
-
 
         val lbNombreUsuario:TextView = header.findViewById(R.id.lbNombreUsuario)
         val lbCorreoUsuario:TextView  = header.findViewById(R.id.lbCorreoUsuario)
