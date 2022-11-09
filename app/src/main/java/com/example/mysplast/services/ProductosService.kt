@@ -8,7 +8,7 @@ import retrofit2.http.Header
 interface ProductosService {
 
     @GET("/producto/listar")
-    fun getListadoProductos(@Header("Authorization") accesstoken: String): Call<Producto>
+    fun getListadoProductos(@Header("Authorization") accesstoken: String): Call<List<Producto>>
 
 
 }

@@ -3,23 +3,29 @@ package com.example.mysplast.ui.productos
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mysplast.adapters.ListadoProductosAdapter
 import com.example.mysplast.databinding.FragmentProductoBinding
+import com.example.mysplast.model.Producto
+import com.example.mysplast.services.ProductosService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-class ProductoFragment : Fragment() {
+class ProductoFragment : Fragment(), OnClickListener{
 
     var mpref: SharedPreferences? = null
     var payload: String? = null
-
     private var _binding: FragmentProductoBinding? = null
+    private lateinit var listAdapterProductos: ListadoProductosAdapter
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -27,26 +33,54 @@ class ProductoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val productoViewModel =
-            ViewModelProvider(this).get(ProductoViewModel::class.java)
 
         mpref = this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)
         payload = mpref?.getString("accesstoken","")
-
-        Log.d("tokeeeeeeeeeeeeeeeeeeeeeeeeeeeen",payload.toString())
-
         _binding = FragmentProductoBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-       /* val textView: TextView = binding.textProducto
-        productoViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
+        configuracionRecyclerView()
+        listadoProductos(payload!!)
         return root
+
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun configuracionRecyclerView(){
+        listAdapterProductos = ListadoProductosAdapter(this)
+        binding.rcvProductos.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = listAdapterProductos
+        }
+    }
+
+    private fun listadoProductos(token: String){
+        val retro = Retrofit.Builder().baseUrl("http://192.168.3.36:8080").addConverterFactory(GsonConverterFactory.create()).build()
+        val pro: ProductosService = retro.create(ProductosService::class.java)
+        val call: Call<List<Producto>> = pro.getListadoProductos("Bearer $token")
+        call.enqueue(object : Callback<List<Producto>>{
+            override fun onResponse(
+                call: Call<List<Producto>>,
+                response: Response<List<Producto>>
+            ) {
+                listAdapterProductos.submitList(response.body())
+            }
+
+            override fun onFailure(call: Call<List<Producto>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    override fun onClick(p0: View?) {
+        TODO("Not yet implemented")
+    }
+
+
 }
