@@ -5,7 +5,7 @@ import java.util.*
 
 data class Producto(
 
-    @SerializedName("id_producto")
+    @SerializedName("id_PRODUCTO")
     var id_producto: String,
 
     @SerializedName("nombre")
@@ -17,14 +17,20 @@ data class Producto(
     @SerializedName("stockmin")
     val stockmin: Double,
 
-    @SerializedName("id_categoria")
+    @SerializedName("id_CATEGORIA")
     val id_categoria: Categoria,
 
-    @SerializedName("id_unmedida")
+    @SerializedName("id_UNMEDIDA")
     val id_unmedida: Unmedida,
 
-    @SerializedName("id_marca")
+    @SerializedName("id_MARCA")
     val id_marca: Marca,
+
+    @SerializedName("flag_PRODUCCION")
+    val flag_produccion : String,
+
+    @SerializedName("flag_INSUMO")
+    val flag_insumo: String,
 
     @SerializedName("imagen")
     val imagen: String,
@@ -32,24 +38,6 @@ data class Producto(
     @SerializedName("estado")
     val estado: String,
 
-    @SerializedName("externalcode")
-    val externalcode: String,
-
-    @SerializedName("RegisterUser")
-    val registerUser: String,
-
-    @SerializedName("RegisterDate")
-    val registerDate: Date,
-
-    @SerializedName("XLastUser")
-    val xLastUser: String,
-
-    @SerializedName("XLasDate")
-    val xLasDate: Date,
-
-    @SerializedName("ActivationUser")
-    val activationUser: String,
-
-    @SerializedName("ActivationDate")
-    val activationDate: Date,
+    @SerializedName("codexterno")
+    val codexterno: String,
 )

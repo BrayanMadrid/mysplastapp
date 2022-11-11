@@ -2,6 +2,7 @@ package com.example.mysplast.adapters
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -31,6 +32,28 @@ class ListadoProductosAdapter (private val listener: OnClickListener):
 
         with(holder as ViewHolder){
             binding.edtNomProducto.text = obtenerProducto.nombre
+            binding.edtCategoria.text = obtenerProducto.id_categoria.nom_categoria
+            binding.edtUnMedida.text = obtenerProducto.id_unmedida.nom_unmedida
+            binding.edtMarca.text = obtenerProducto.id_marca.nom_marca
+            binding.edtCodigo.text = obtenerProducto.codexterno
+
+            if (obtenerProducto.estado=="A"){
+                binding.edtEstado.text = "Activo"
+            } else {
+                binding.edtEstado.text = "Inactivo"
+            }
+
+            if (obtenerProducto.flag_produccion=="Y"){
+                binding.edtProduccion.text = "Si"
+            } else {
+                binding.edtProduccion.text = "No"
+            }
+
+            if (obtenerProducto.flag_insumo=="Y"){
+                binding.edtInsumo.text = "Si"
+            } else {
+                binding.edtInsumo.text = "No"
+            }
         }
     }
 
