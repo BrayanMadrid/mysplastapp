@@ -1,17 +1,25 @@
 package com.example.mysplast.ui.ordenes
 
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import com.example.mysplast.ActivityProduccion
 import com.example.mysplast.databinding.FragmentOrdenesBinding
+import com.example.mysplast.R
 
 class OrdenesFragment : Fragment() {
 
+    var mpref: SharedPreferences? = null
+    var payload: String? = null
     private var _binding: FragmentOrdenesBinding? = null
+
+    lateinit var btnProduccion: CardView
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,21 +30,26 @@ class OrdenesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val ordenesViewModel =
-            ViewModelProvider(this).get(OrdenesViewModel::class.java)
 
+
+        mpref = this.activity?.getSharedPreferences("token", Context.MODE_PRIVATE)
+        payload = mpref?.getString("accesstoken","")
         _binding = FragmentOrdenesBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val textView: TextView = binding.textSlideshow
-        ordenesViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        btnProduccion = root.findViewById(R.id.btnProduccion)
+        btnProduccion.setOnClickListener {
+            val intent =  Intent(this.context, ActivityProduccion::class.java).apply {
+                putExtra("payload",  payload!!)
+            }
+            startActivity(intent)
         }
-        return root
+            return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }

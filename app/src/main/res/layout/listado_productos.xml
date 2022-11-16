@@ -35,7 +35,9 @@
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:text="TextView"
-                    android:textSize="24sp" />
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -48,7 +50,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Codigo:"
-                        android:textSize="16sp" />
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/edtCodigo"
@@ -68,7 +72,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Marca:"
-                        android:textSize="16sp" />
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/edtMarca"
@@ -89,7 +95,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Und. Medida:"
-                        android:textSize="16sp" />
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/edtUnMedida"
@@ -109,7 +117,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:text="Categoría:"
-                        android:textSize="16sp" />
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/edtCategoria"
@@ -130,7 +140,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Estado"
-                        android:textSize="16sp" />
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView14"
@@ -138,7 +150,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Producción"
-                        android:textSize="16sp" />
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textView15"
@@ -146,7 +160,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Insumo"
-                        android:textSize="16sp" />
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout

@@ -3,11 +3,13 @@ package com.example.mysplast.ui.productos
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mysplast.adapters.ListadoProductosAdapter
@@ -17,6 +19,7 @@ import com.example.mysplast.services.ProductosService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.example.mysplast.R
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -26,6 +29,8 @@ class ProductoFragment : Fragment(), OnClickListener{
     var payload: String? = null
     private var _binding: FragmentProductoBinding? = null
     private lateinit var listAdapterProductos: ListadoProductosAdapter
+    lateinit var btnBuscarProducto: Button
+    lateinit var edtTerminoProducto: EditText
 
     private val binding get() = _binding!!
 
@@ -41,6 +46,18 @@ class ProductoFragment : Fragment(), OnClickListener{
         val root: View = binding.root
         configuracionRecyclerView()
         listadoProductos(payload!!)
+        btnBuscarProducto = root.findViewById(R.id.btnConsultarProducto)
+        edtTerminoProducto = root.findViewById(R.id.edtTerminoProducto)
+        btnBuscarProducto.setOnClickListener {
+            var termino: String = edtTerminoProducto.text.toString()
+            if (termino==""){
+                Toast.makeText(this.context,"Tiene que ingresar al menos un término para poder realizar la consulta!",Toast.LENGTH_SHORT).show()
+            }else {
+                buscarProductoxTermino(payload!!,termino)
+            }
+
+
+        }
         return root
 
     }
@@ -69,6 +86,27 @@ class ProductoFragment : Fragment(), OnClickListener{
                 call: Call<List<Producto>>,
                 response: Response<List<Producto>>
             ) {
+                listAdapterProductos.submitList(response.body())
+            }
+
+            override fun onFailure(call: Call<List<Producto>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+
+    private fun buscarProductoxTermino(token: String, term: String){
+        val retro = Retrofit.Builder().baseUrl("http://192.168.3.36:8080").addConverterFactory(GsonConverterFactory.create()).build()
+        val pro: ProductosService = retro.create(ProductosService::class.java)
+        val call: Call<List<Producto>> = pro.getProductosxTermino("Bearer $token", term)
+        call.enqueue(object : Callback<List<Producto>>{
+            override fun onResponse(
+                call: Call<List<Producto>>,
+                response: Response<List<Producto>>
+            ) {
+                listAdapterProductos.notifyDataSetChanged()
                 listAdapterProductos.submitList(response.body())
             }
 
