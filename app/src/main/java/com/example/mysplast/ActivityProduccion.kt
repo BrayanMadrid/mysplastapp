@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.example.mysplast.model.Natural
+import android.view.View
+import android.view.View.OnClickListener
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mysplast.adapters.ListadoOrdenesProdAdapter
+import com.example.mysplast.databinding.ActivityProduccionBinding
 import com.example.mysplast.model.Ordenprod
-import com.example.mysplast.services.NaturalService
 import com.example.mysplast.services.OrdenProdService
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,17 +17,32 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ActivityProduccion : AppCompatActivity() {
+class ActivityProduccion : AppCompatActivity(), OnClickListener {
 
+    private lateinit var  binding : ActivityProduccionBinding
     var mpref: SharedPreferences? = null
     var payload: String? = null
+    private lateinit var listAdapterOrdenProds: ListadoOrdenesProdAdapter
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_produccion)
+        binding = ActivityProduccionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         mpref = this.getSharedPreferences("token", Context.MODE_PRIVATE)
         payload = mpref?.getString("accesstoken","")
+        configuracionRecyclerView()
         listadoOrdenProduccion(payload!!)
+    }
+
+    private fun configuracionRecyclerView(){
+        listAdapterOrdenProds = ListadoOrdenesProdAdapter(this)
+        binding.rcvOrdenProd.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = listAdapterOrdenProds
+        }
     }
 
     private fun listadoOrdenProduccion(token: String){
@@ -39,9 +56,7 @@ class ActivityProduccion : AppCompatActivity() {
                 response: Response<List<Ordenprod>>
 
             ) {
-                Log.d("ORDENPRODUCIOOOON", response.body()?.get(0)?.nro_ordenprod.toString())
-                Log.d("ORDENPRODUCIOOOON", response.body()?.get(1)?.nro_ordenprod.toString())
-                Log.d("ORDENPRODUCIOOOON", response.body()?.get(2)?.nro_ordenprod.toString())
+                listAdapterOrdenProds.submitList(response.body())
             }
 
             override fun onFailure(call: Call<List<Ordenprod>>, t: Throwable) {
@@ -49,5 +64,9 @@ class ActivityProduccion : AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onClick(p0: View?) {
+        TODO("Not yet implemented")
     }
 }
