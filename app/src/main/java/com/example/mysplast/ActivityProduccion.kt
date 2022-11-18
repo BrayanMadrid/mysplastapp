@@ -46,7 +46,7 @@ class ActivityProduccion : AppCompatActivity(), OnClickListener {
     }
 
     private fun listadoOrdenProduccion(token: String){
-        val retro = Retrofit.Builder().baseUrl("http://192.168.3.36:8080").addConverterFactory(
+        val retro = Retrofit.Builder().baseUrl("http://192.168.151.72:8080").addConverterFactory(
             GsonConverterFactory.create()).build()
         val pro: OrdenProdService = retro.create(OrdenProdService::class.java)
         val call: Call<List<Ordenprod>> = pro.getListadoOrdenesProduccion("Bearer $token")

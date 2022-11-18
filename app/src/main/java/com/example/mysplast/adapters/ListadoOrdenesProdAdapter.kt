@@ -1,21 +1,24 @@
 package com.example.mysplast.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mysplast.R
+import com.example.mysplast.ViewOrdenPActivity
 import com.example.mysplast.databinding.ListadoOrdenesprodBinding
 import com.example.mysplast.model.Ordenprod
 import java.text.SimpleDateFormat
 
 class ListadoOrdenesProdAdapter  (private val listener: OnClickListener):
-    ListAdapter<Ordenprod, RecyclerView.ViewHolder>(OrdenDiffCallback()) {
+    ListAdapter<Ordenprod, RecyclerView.ViewHolder>(OrdenDiffCallback()){
 
     private lateinit var context: Context
 
@@ -46,6 +49,15 @@ class ListadoOrdenesProdAdapter  (private val listener: OnClickListener):
             } else {
                 binding.edtEstado.text = "Anulado"
             }
+            val btnVisualizarOrden: Button = binding.btnVisualizarOrdenProd
+            btnVisualizarOrden.setOnClickListener {
+
+                val intent: Intent =  Intent(context, ViewOrdenPActivity::class.java).apply {
+                    putExtra("idordenprod",  obtenerOrdenprod.id_ordenprod)
+                }
+                context.startActivity(intent)
+
+            }
         }
     }
 
@@ -62,4 +74,7 @@ class ListadoOrdenesProdAdapter  (private val listener: OnClickListener):
 
 
     }
+
+
+
 }

@@ -3,7 +3,7 @@ package com.example.mysplast.model
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
-data class Ordenprod(
+ data class Ordenprod (
 
     @SerializedName("id_ORDENPROD")
     var id_ordenprod: String,
@@ -30,5 +30,5 @@ data class Ordenprod(
     var id_PERSONA: Natural,
 
     @SerializedName("items")
-    var items: ArrayList<ItemOrdenprod>
+    var items: List<ItemOrdenprod>
 )

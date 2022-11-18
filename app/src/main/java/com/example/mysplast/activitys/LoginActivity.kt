@@ -1,9 +1,7 @@
 package com.example.mysplast.activitys
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.util.Base64
 import android.util.Log
 import android.widget.Button
