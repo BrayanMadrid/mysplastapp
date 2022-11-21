@@ -22,7 +22,7 @@ interface ApiService {
 
     companion object Factory{
 
-        private const val BASE_URL = "http://192.168.151.72:8080/"
+        private const val BASE_URL = "http://192.168.3.36:8080/"
         fun create():ApiService{
             var retrofit = Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(
                 GsonConverterFactory.create()).build()

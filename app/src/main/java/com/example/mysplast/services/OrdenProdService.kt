@@ -5,6 +5,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface OrdenProdService {
 
@@ -13,4 +14,8 @@ interface OrdenProdService {
 
     @GET("/ordenprod/buscar/{id}")
     fun getOrdenxID(@Header("Authorization") accesstoken: String, @Path("id") id: String): Call<Ordenprod>
+
+    @GET("/ordenprod/filtro")
+    fun getFiltroOrdenesProd(@Header("Authorization") accesstoken: String, @Query(value="subalmacen") subalmacen: String, @Query(value="almacen") almacen: String,
+    @Query(value = "fecha1") fecha1: String, @Query(value="fecha2") fecha2: String, @Query(value="estado") estado: String): Call<ArrayList<Ordenprod>>
 }

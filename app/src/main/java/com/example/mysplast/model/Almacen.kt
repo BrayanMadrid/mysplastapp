@@ -12,4 +12,8 @@ data class Almacen(
 
     @SerializedName("estado")
     var estado: String,
-)
+) {
+    override fun toString(): String {
+        return nom_almacen
+    }
+}

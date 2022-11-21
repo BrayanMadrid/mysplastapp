@@ -12,4 +12,8 @@ data class Sector(
 
     @SerializedName("id_ALMACEN")
     var id_almacen: Almacen,
-)
+) {
+    override fun toString(): String {
+        return nom_sector
+    }
+}
