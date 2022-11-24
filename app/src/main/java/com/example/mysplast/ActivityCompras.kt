@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.AdapterView
@@ -14,13 +15,13 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mysplast.adapters.ListadoOrdenesProdAdapter
-import com.example.mysplast.databinding.ActivityProduccionBinding
+import com.example.mysplast.adapters.ListadoOrdenCompraAdapter
+import com.example.mysplast.databinding.ActivityComprasBinding
 import com.example.mysplast.model.Almacen
-import com.example.mysplast.model.Ordenprod
+import com.example.mysplast.model.Ordencompra
 import com.example.mysplast.model.Sector
 import com.example.mysplast.services.AlmacenService
-import com.example.mysplast.services.OrdenProdService
+import com.example.mysplast.services.OrdenCompraService
 import com.example.mysplast.services.SectorService
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,44 +30,46 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
-class ActivityProduccion() : AppCompatActivity(), OnClickListener {
+class ActivityCompras : AppCompatActivity(), OnClickListener {
 
-    private lateinit var  binding : ActivityProduccionBinding
+    lateinit var fechaInCompra: EditText
+    lateinit var fechaFinCompra: EditText
+    private lateinit var  binding : ActivityComprasBinding
     var mpref: SharedPreferences? = null
     var payload: String? = null
-    private lateinit var listAdapterOrdenProds: ListadoOrdenesProdAdapter
+    private lateinit var listadoOrdenCompraAdapter: ListadoOrdenCompraAdapter
     private var almacen: String? = ""
     private var sector: String? = ""
-    lateinit var fechaInAE: EditText
-    lateinit var fechaFinAE: EditText
     lateinit var spalmacen: Spinner
     lateinit var spsector: Spinner
-    lateinit var btnConsultarOP: Button
+    lateinit var btnConsultarCompra: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityProduccionBinding.inflate(layoutInflater)
+        binding = ActivityComprasBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mpref = this.getSharedPreferences("token", Context.MODE_PRIVATE)
         payload = mpref?.getString("accesstoken","")
-        fechaInAE =  findViewById(R.id.edtFechaInAI)
-        fechaFinAE = findViewById(R.id.edtFechaFinAI)
-        spalmacen = findViewById(R.id.spalmacenxi)
-        spsector = findViewById(R.id.spsectorxi)
-        btnConsultarOP = findViewById(R.id.btnConsultarOP)
-        btnConsultarOP.setOnClickListener {
+        fechaInCompra =  findViewById(R.id.edtFechaInCompra)
+        fechaFinCompra = findViewById(R.id.edtFechaFinCompra)
+
+        spalmacen = findViewById(R.id.spalmacenCompra)
+        spsector = findViewById(R.id.spsectorCompra)
+        btnConsultarCompra = findViewById(R.id.btnConsultarCompra)
+        btnConsultarCompra.setOnClickListener {
 
             var almacenSeleccionado: String =  almacen.toString()
             var sectorSeleccionado: String =  sector.toString()
-            var fechaInicioSeleccionada: String = fechaInAE.text.toString()
-            var fechaFinalSeleccionada: String  = fechaFinAE.text.toString()
-            buscarOrdenesProduccion(payload!!,sectorSeleccionado, almacenSeleccionado, fechaInicioSeleccionada, fechaFinalSeleccionada,"")
+            var fechaInicioSeleccionada: String = fechaInCompra.text.toString()
+            var fechaFinalSeleccionada: String  = fechaFinCompra.text.toString()
+            buscarOrdenesCompra(payload!!,sectorSeleccionado, almacenSeleccionado, fechaInicioSeleccionada, fechaFinalSeleccionada)
 
         }
-        fechaInAE.setOnClickListener(View.OnClickListener {
+
+        fechaInCompra.setOnClickListener(View.OnClickListener {
             CargarFechaIn()
         })
-        fechaFinAE.setOnClickListener(View.OnClickListener {
+        fechaFinCompra.setOnClickListener(View.OnClickListener {
             CargarFechaFin()
         })
 
@@ -99,44 +102,11 @@ class ActivityProduccion() : AppCompatActivity(), OnClickListener {
         })
         obtenerAlmacenes(payload!!)
         configuracionRecyclerView()
-        listadoOrdenProduccion(payload!!)
+        listadoOrdenesCompra(payload!!)
+
     }
 
-    private fun configuracionRecyclerView(){
-        listAdapterOrdenProds = ListadoOrdenesProdAdapter(this)
-        binding.rcvOrdenProd.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = listAdapterOrdenProds
-        }
-    }
 
-    private fun listadoOrdenProduccion(token: String){
-        val retro = Retrofit.Builder().baseUrl("http://192.168.3.36:8080").addConverterFactory(
-            GsonConverterFactory.create()).build()
-        val pro: OrdenProdService = retro.create(OrdenProdService::class.java)
-        val call: Call<List<Ordenprod>> = pro.getListadoOrdenesProduccion("Bearer $token")
-        call.enqueue(object : Callback<List<Ordenprod>> {
-            override fun onResponse(
-                call: Call<List<Ordenprod>>,
-                response: Response<List<Ordenprod>>
-
-            ) {
-                listAdapterOrdenProds.submitList(response.body())
-            }
-
-            override fun onFailure(call: Call<List<Ordenprod>>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
-
-        })
-    }
-
-    override fun onClick(p0: View?) {
-        TODO("Not yet implemented")
-    }
-
-    // fin create
     private fun CargarFechaIn() {
         val calendar = Calendar.getInstance()
         val YEAR = calendar[Calendar.YEAR]
@@ -144,12 +114,12 @@ class ActivityProduccion() : AppCompatActivity(), OnClickListener {
         val DATE = calendar[Calendar.DATE]
         val datePickerDialog = DatePickerDialog(this,
             { datePicker, year, month, date ->
-                fechaInAE?.setText("")
+                fechaInCompra?.setText("")
                 val calendar1 = Calendar.getInstance()
                 calendar1[Calendar.YEAR] = year
                 calendar1[Calendar.MONTH] = month
                 calendar1[Calendar.DATE] = date
-                fechaInAE?.setText(DateFormat.format("dd-MM-yyyy", calendar1))
+                fechaInCompra?.setText(DateFormat.format("dd-MM-yyyy", calendar1))
             }, YEAR, MONTH, DATE
         )
         datePickerDialog.show()
@@ -162,15 +132,51 @@ class ActivityProduccion() : AppCompatActivity(), OnClickListener {
         val DATE = calendar[Calendar.DATE]
         val datePickerDialog = DatePickerDialog(this,
             { datePicker, year, month, date ->
-                fechaFinAE?.setText("")
+                fechaFinCompra?.setText("")
                 val calendar1 = Calendar.getInstance()
                 calendar1[Calendar.YEAR] = year
                 calendar1[Calendar.MONTH] = month
                 calendar1[Calendar.DATE] = date
-                fechaFinAE?.setText(DateFormat.format("dd-MM-yyyy", calendar1))
+                fechaFinCompra?.setText(DateFormat.format("dd-MM-yyyy", calendar1))
             }, YEAR, MONTH, DATE
         )
         datePickerDialog.show()
+    }
+
+
+    override fun onClick(p0: View?) {
+        TODO("Not yet implemented")
+    }
+
+
+    private fun configuracionRecyclerView(){
+        listadoOrdenCompraAdapter = ListadoOrdenCompraAdapter(this)
+        binding.rcvOrdenCompra.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = listadoOrdenCompraAdapter
+        }
+    }
+
+    private fun listadoOrdenesCompra(token: String){
+        val retro = Retrofit.Builder().baseUrl("http://192.168.3.36:8080").addConverterFactory(
+            GsonConverterFactory.create()).build()
+        val pro: OrdenCompraService = retro.create(OrdenCompraService::class.java)
+        val call: Call<ArrayList<Ordencompra>> = pro.getListadoOrdenesCompra("Bearer $token")
+        call.enqueue(object : Callback<ArrayList<Ordencompra>> {
+            override fun onResponse(
+                call: Call<ArrayList<Ordencompra>>,
+                response: Response<ArrayList<Ordencompra>>
+
+            ) {
+                listadoOrdenCompraAdapter.submitList(response.body())
+            }
+
+            override fun onFailure(call: Call<ArrayList<Ordencompra>>, t: Throwable) {
+
+            }
+
+        })
     }
 
     private fun obtenerSectores(token: String, almacen: String){
@@ -235,29 +241,28 @@ class ActivityProduccion() : AppCompatActivity(), OnClickListener {
     }
 
 
-    private fun buscarOrdenesProduccion(token: String, sector: String, almacen: String, fecha1: String, fecha2: String, estado: String){
+    private fun buscarOrdenesCompra(token: String, sector: String, almacen: String, fecha1: String, fecha2: String){
         val retro = Retrofit.Builder().baseUrl("http://192.168.3.36:8080").addConverterFactory(
             GsonConverterFactory.create()).build()
-        val pro: OrdenProdService = retro.create(OrdenProdService::class.java)
-        val call: Call<ArrayList<Ordenprod>> = pro.getFiltroOrdenesProd("Bearer $token", sector, almacen, fecha1, fecha2, estado)
-        call.enqueue(object : Callback<ArrayList<Ordenprod>> {
+        val pro: OrdenCompraService = retro.create(OrdenCompraService::class.java)
+        val call: Call<ArrayList<Ordencompra>> = pro.getFiltroOrdenesCompra("Bearer $token", sector, almacen, fecha1, fecha2)
+        call.enqueue(object : Callback<ArrayList<Ordencompra>> {
             override fun onResponse(
-                call: Call<ArrayList<Ordenprod>>,
-                response: Response<ArrayList<Ordenprod>>
+                call: Call<ArrayList<Ordencompra>>,
+                response: Response<ArrayList<Ordencompra>>
 
             ) {
                 if(response.isSuccessful()){
-                    listAdapterOrdenProds.notifyDataSetChanged()
-                    listAdapterOrdenProds.submitList(response.body())
+                    listadoOrdenCompraAdapter.notifyDataSetChanged()
+                    listadoOrdenCompraAdapter.submitList(response.body())
                 }
 
             }
 
-            override fun onFailure(call: Call<ArrayList<Ordenprod>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<Ordencompra>>, t: Throwable) {
                 TODO("Not yet implemented")
             }
 
         })
     }
-
 }

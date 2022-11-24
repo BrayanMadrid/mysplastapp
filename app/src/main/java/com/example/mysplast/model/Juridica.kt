@@ -11,6 +11,6 @@ data class Juridica (
     var representante: String,
 
     @SerializedName("id_ACTIVIDAD")
-    var id_ACTIVIDAD: String,
+    var id_ACTIVIDAD: Actividad,
 
 ): Persona()

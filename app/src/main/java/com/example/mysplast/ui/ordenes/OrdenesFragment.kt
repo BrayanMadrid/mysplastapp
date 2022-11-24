@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import com.example.mysplast.ActivityCompras
 import com.example.mysplast.ActivityProduccion
 import com.example.mysplast.databinding.FragmentOrdenesBinding
 import com.example.mysplast.R
@@ -20,6 +21,7 @@ class OrdenesFragment : Fragment() {
     private var _binding: FragmentOrdenesBinding? = null
 
     lateinit var btnProduccion: CardView
+    lateinit var btnCompras: CardView
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -39,6 +41,13 @@ class OrdenesFragment : Fragment() {
         btnProduccion = root.findViewById(R.id.btnProduccion)
         btnProduccion.setOnClickListener {
             val intent =  Intent(this.context, ActivityProduccion::class.java).apply {
+                putExtra("payload",  payload!!)
+            }
+            startActivity(intent)
+        }
+        btnCompras = root.findViewById(R.id.btnCompras)
+        btnCompras.setOnClickListener {
+            val intent =  Intent(this.context, ActivityCompras::class.java).apply {
                 putExtra("payload",  payload!!)
             }
             startActivity(intent)
