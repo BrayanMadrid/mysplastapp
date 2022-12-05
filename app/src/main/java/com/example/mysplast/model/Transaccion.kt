@@ -16,7 +16,7 @@ abstract class Transaccion(
     lateinit var fechatran: Date
 
     @SerializedName("desc_TRAN")
-    lateinit var desc_TRAN: String
+    var desc_TRAN: String = ""
 
     @SerializedName("estado")
     lateinit var estado: String

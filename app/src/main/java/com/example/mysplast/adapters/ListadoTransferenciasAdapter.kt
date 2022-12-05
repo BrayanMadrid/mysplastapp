@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mysplast.R
-import com.example.mysplast.ViewOrderCActivity
+import com.example.mysplast.ViewTransferenciaActivity
 import com.example.mysplast.databinding.ListadoTransferenciasBinding
 import com.example.mysplast.model.Transferencia
 import java.text.SimpleDateFormat
@@ -52,8 +52,8 @@ class ListadoTransferenciasAdapter(private val listener: View.OnClickListener):
             val btnVisualizarTransferencia: Button = binding.btnVisualizarTransferencia
             btnVisualizarTransferencia.setOnClickListener {
 
-                val intent: Intent =  Intent(context, ViewOrderCActivity::class.java).apply {
-                    putExtra("idtransferencia",  obtenerTransferencia.id_tran)
+                val intent: Intent =  Intent(context, ViewTransferenciaActivity::class.java).apply {
+                    putExtra("idtransaccion",  obtenerTransferencia.id_tran)
                 }
                 context.startActivity(intent)
 

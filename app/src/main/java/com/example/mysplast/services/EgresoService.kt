@@ -16,6 +16,7 @@ interface EgresoService {
     fun getEgresoxID(@Header("Authorization") accesstoken: String, @Path("id") id: String): Call<Egreso>
 
     @GET("/egreso/filtro")
-    fun getFiltroEgreso(@Header("Authorization") accesstoken: String, @Query(value="subalmacen") subalmacen: String, @Query(value="almacen") almacen: String,
+    fun getFiltroEgreso(@Header("Authorization") accesstoken: String, @Query(value="sector") sector: String, @Query(value="almacen") almacen: String,
                         @Query(value = "fecha1") fecha1: String, @Query(value="fecha2") fecha2: String): Call<ArrayList<Egreso>>
+
 }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mysplast.R
-import com.example.mysplast.ViewOrderCActivity
+import com.example.mysplast.ViewEgresoActivity
 import com.example.mysplast.databinding.ListadoEgresosBinding
 import com.example.mysplast.model.Egreso
 import java.text.SimpleDateFormat
@@ -50,8 +50,8 @@ class ListadoEgresosAdapter(private val listener: View.OnClickListener):
             val btnVisualizarEgreso: Button = binding.btnVisualizarEgreso
             btnVisualizarEgreso.setOnClickListener {
 
-                val intent: Intent =  Intent(context, ViewOrderCActivity::class.java).apply {
-                    putExtra("idegreso",  obtenerEgreso.id_tran)
+                val intent: Intent =  Intent(context, ViewEgresoActivity::class.java).apply {
+                    putExtra("idtransaccion",  obtenerEgreso.id_tran)
                 }
                 context.startActivity(intent)
 

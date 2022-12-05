@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mysplast.R
-import com.example.mysplast.ViewOrderCActivity
+import com.example.mysplast.ViewIngresoActivity
 import com.example.mysplast.databinding.ListadoIngresosBinding
 import com.example.mysplast.model.Ingreso
 import java.text.SimpleDateFormat
@@ -50,8 +50,8 @@ class ListadoIngresosAdapter(private val listener: View.OnClickListener):
             val btnVisualizarIngreso: Button = binding.btnVisualizarIngreso
             btnVisualizarIngreso.setOnClickListener {
 
-                val intent: Intent =  Intent(context, ViewOrderCActivity::class.java).apply {
-                    putExtra("idingreso",  obtenerIngreso.id_tran)
+                val intent: Intent =  Intent(context, ViewIngresoActivity::class.java).apply {
+                    putExtra("idtransaccion",  obtenerIngreso.id_tran)
                 }
                 context.startActivity(intent)
 

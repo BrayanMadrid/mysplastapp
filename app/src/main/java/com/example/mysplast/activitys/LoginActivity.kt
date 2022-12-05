@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                             editor.putString("accesstoken", respuesta.accesstoken)
                             editor.commit()
 
-                            var token = Token(respuesta.accesstoken, respuesta.refreshToken)
+
 
                             payloadtokeeeen = (respuesta.accesstoken).split("\\.".toRegex())[1]
                             var objeto = Base64.decode(payloadtokeeeen, Base64.DEFAULT)
@@ -83,8 +83,6 @@ class LoginActivity : AppCompatActivity() {
 
                             editorusuario.putString("accesstoken", payload.user_name)
                             editorusuario.commit()
-                            Log.d("Username", payload.user_name)
-                            Log.d("Correo", payload.correo)
                             val intent =  Intent(applicationContext, MainActivity::class.java).apply {
                                 putExtra("username",  payload.user_name)
                                 putExtra("correo",payload.correo)
