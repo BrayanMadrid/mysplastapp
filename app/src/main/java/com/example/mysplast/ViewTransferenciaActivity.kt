@@ -42,7 +42,6 @@ class ViewTransferenciaActivity : AppCompatActivity(), View.OnClickListener {
     private fun configuracionRecyclerView(){
         itemTransferenciaAdapter = ItemTransferenciaAdapter(this)
         binding.rcvItemTransferencia.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = itemTransferenciaAdapter
         }

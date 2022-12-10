@@ -41,7 +41,6 @@ class ViewEgresoActivity : AppCompatActivity(), View.OnClickListener {
     private fun configuracionRecyclerView(){
         itemEgresoAdapter = ItemEgresoAdapter(this)
         binding.rcvItemEgreso.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = itemEgresoAdapter
         }

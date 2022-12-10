@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +35,7 @@ class ViewIngresoActivity : AppCompatActivity(), View.OnClickListener {
         payload = mpref?.getString("accesstoken","")
         val transaccionObtenida: Intent = intent
         val transaccionseleccionada =  transaccionObtenida.getStringExtra("idtransaccion")
+        Log.d("TRANSACION",transaccionseleccionada.toString())
         configuracionRecyclerView()
         obtenerIngresoProduccion(payload!!, transaccionseleccionada.toString())
     }
@@ -41,7 +43,6 @@ class ViewIngresoActivity : AppCompatActivity(), View.OnClickListener {
     private fun configuracionRecyclerView(){
         itemIngresoAdapter = ItemIngresoAdapter(this)
         binding.rcvItemIngreso.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = itemIngresoAdapter
         }
@@ -81,7 +82,7 @@ class ViewIngresoActivity : AppCompatActivity(), View.OnClickListener {
                 sectorin.text = response.body()?.id_sector?.nom_sector
                 comentarios.text = response.body()?.desc_TRAN
                 itemIngresoAdapter.submitList(response.body()?.items)
-
+                Log.d("PRODUCTO",response.body()?.items?.get(0)?.id_producto?.nombre.toString())
                 if(response.body()?.estado.equals("I")){
                     estado.text = "Inventariado"
                 } else if(response.body()?.estado.equals("P")){

@@ -94,7 +94,6 @@ class ViewOrdenPActivity : AppCompatActivity(), OnClickListener {
     private fun configuracionRecyclerView(){
         itemOrdenProdAdapter = ItemOrdenProdAdapter(this)
         binding.rcvItemOrdenProd.apply {
-            setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = itemOrdenProdAdapter
         }
