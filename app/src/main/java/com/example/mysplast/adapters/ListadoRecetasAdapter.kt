@@ -106,4 +106,5 @@ class ListadoRecetasAdapter (private val listener: View.OnClickListener):
     override fun onClick(p0: View?) {
         TODO("Not yet implemented")
     }
+
 }

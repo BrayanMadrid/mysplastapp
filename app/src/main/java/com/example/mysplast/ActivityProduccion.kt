@@ -29,11 +29,17 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
+//Actividad donde se muestra el listado y filtro para las ordenes de producción
 class ActivityProduccion() : AppCompatActivity(), OnClickListener {
 
+    //inicializamos una valiable llamada binding del tipo ActivityProduccionBinding (hace referencia a la vista de la actividad producción)
     private lateinit var  binding : ActivityProduccionBinding
+
+    //creamos una variable llamada mpref del tipo SharedPreferences (datos alojados temporalmente en el app como usuarios, contraseñas o tókens) y lo inicializamos en null
     var mpref: SharedPreferences? = null
+    //creamos una variable lamada payload de tipo String.
     var payload: String? = null
+    //Inicializamos el adaptador ListadoOrdenesProdAdapter al cual se le mandará e listado de Ordenes de Producción para su visualización en el RecyclerView
     private lateinit var listAdapterOrdenProds: ListadoOrdenesProdAdapter
     private var almacen: String? = ""
     private var sector: String? = ""
@@ -45,8 +51,10 @@ class ActivityProduccion() : AppCompatActivity(), OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Le asignamos a la variable binding la vista de la actividad, en este caso ActivityProduccionBinding y su correspondiente xml
         binding = ActivityProduccionBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //le pasamos el valor almacenado temporalmente en el app (token) para poder realizar uso del mismo en las cunsultas del activity al servidor spring
         mpref = this.getSharedPreferences("token", Context.MODE_PRIVATE)
         payload = mpref?.getString("accesstoken","")
         fechaInAE =  findViewById(R.id.edtFechaInAI)
@@ -102,8 +110,11 @@ class ActivityProduccion() : AppCompatActivity(), OnClickListener {
         listadoOrdenProduccion(payload!!)
     }
 
+    //Creamos el método para poder realizar la configuración inicial del adapter que usaremos en esta actividad
     private fun configuracionRecyclerView(){
+
         listAdapterOrdenProds = ListadoOrdenesProdAdapter(this)
+        //utiizamos el recyclerview de la actividad identificado con el id rcvOrdenProd al cual le asignaremos el adapter ListadoOrdenesProdAdapter
         binding.rcvOrdenProd.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
@@ -111,17 +122,27 @@ class ActivityProduccion() : AppCompatActivity(), OnClickListener {
         }
     }
 
+    //metodo que realizará la petición del listado de ordenes de producción al servidor de spring
     private fun listadoOrdenProduccion(token: String){
+        //Se crea una variable llamada retro a cual se le asignará la base de a URL y como respuesta se dará el formato Json.
         val retro = Retrofit.Builder().baseUrl("http://192.168.3.36:8080").addConverterFactory(
             GsonConverterFactory.create()).build()
+
+        //Se crea una variable llamada pro del tipo OrdenProService (Interface donde se encuentran los métodos a usar de la OrdenprodController de Spring)
         val pro: OrdenProdService = retro.create(OrdenProdService::class.java)
+
+        //Se crea una variable llamada call de tipo Call de retrofit al cual le indicaremos que la respuesta a la llamada que recibiremos será una lista del tipo Ordenprd
+        //Luego llamamos a la variable pro que sería la interface OrdenProdService  y llamamos al método listadoOrdenesProducción el cual necesita el parámetro tóken
         val call: Call<List<Ordenprod>> = pro.getListadoOrdenesProduccion("Bearer $token")
         call.enqueue(object : Callback<List<Ordenprod>> {
             override fun onResponse(
+                //realizamos la llamada
                 call: Call<List<Ordenprod>>,
+                //obtenemos la respuesta del tipo lista de orden de producción
                 response: Response<List<Ordenprod>>
 
             ) {
+                //enviamos la lista al adapter para generar y alimentar el RecyclerView
                 listAdapterOrdenProds.submitList(response.body())
             }
 
