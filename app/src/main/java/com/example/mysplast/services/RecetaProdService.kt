@@ -17,6 +17,6 @@ interface RecetaProdService {
 
     @GET("/recetaprod/filtro")
     fun getFiltroRecetaProd(@Header("Authorization") accesstoken: String, @Query(value="nroreceta") nroreceta: String, @Query(value="producto") producto: String,
-                             @Query(value = "nomreceta") nomreceta: String): Call<ArrayList<Recetaprod>>
+                             @Query(value = "nomreceta") nomreceta: String): Call<List<Recetaprod>>
 
 }

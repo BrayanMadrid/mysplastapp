@@ -10,18 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mysplast.R
-import com.example.mysplast.adapters.ItemRecetaAdapter
-import com.example.mysplast.adapters.ListadoProductosAdapter
 import com.example.mysplast.adapters.ListadoRecetasAdapter
-import com.example.mysplast.databinding.FragmentProductoBinding
 import com.example.mysplast.databinding.FragmentRecetasBinding
-import com.example.mysplast.databinding.ListadoItemRecetasBinding
-import com.example.mysplast.model.Producto
 import com.example.mysplast.model.Recetaprod
-import com.example.mysplast.services.ProductosService
 import com.example.mysplast.services.RecetaProdService
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,6 +28,10 @@ class RecetasFragment : Fragment() , View.OnClickListener {
     var payload: String? = null
     private var _binding: FragmentRecetasBinding? = null
     private lateinit var listadoRecetasAdapter: ListadoRecetasAdapter
+    lateinit var btnConsultarReceta: Button
+    lateinit var edtNroReceta: EditText
+    lateinit var edtNomReceta: EditText
+    lateinit var edtProductoReceta: EditText
 
 
     private val binding get() = _binding!!
@@ -55,7 +52,19 @@ class RecetasFragment : Fragment() , View.OnClickListener {
         _binding = FragmentRecetasBinding.inflate(inflater, container, false)
         val root: View = binding.root
         configuracionRecyclerView()
+        edtNroReceta = root.findViewById(R.id.edtNroRecetaFind)
+        edtNomReceta = root.findViewById(R.id.edtNomRecetaFind)
+        edtProductoReceta = root.findViewById(R.id.edtProdRecetaFind)
+        btnConsultarReceta = root.findViewById(R.id.btnConsultarRecetaProd)
         listadoRecetas(payload!!)
+        btnConsultarReceta.setOnClickListener {
+
+            var numero: String = edtNroReceta.text.toString()
+            var producto: String = edtProductoReceta.text.toString()
+            var nombre: String = edtNomReceta.text.toString()
+            buscarRecetasxTermino(payload!!,numero, producto, nombre)
+
+        }
         return root
         return inflater.inflate(R.layout.fragment_recetas, container, false)
     }
@@ -85,6 +94,26 @@ class RecetasFragment : Fragment() , View.OnClickListener {
                 call: Call<List<Recetaprod>>,
                 response: Response<List<Recetaprod>>
             ) {
+                listadoRecetasAdapter.submitList(response.body())
+            }
+
+            override fun onFailure(call: Call<List<Recetaprod>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    private fun buscarRecetasxTermino(token: String, nroreceta: String, producto: String, nomreceta: String){
+        val retro = Retrofit.Builder().baseUrl("http://192.168.3.36:8080").addConverterFactory(GsonConverterFactory.create()).build()
+        val pro: RecetaProdService = retro.create(RecetaProdService::class.java)
+        val call: Call<List<Recetaprod>> = pro.getFiltroRecetaProd("Bearer $token", nroreceta, producto, nomreceta)
+        call.enqueue(object : Callback<List<Recetaprod>>{
+            override fun onResponse(
+                call: Call<List<Recetaprod>>,
+                response: Response<List<Recetaprod>>
+            ) {
+                listadoRecetasAdapter.notifyDataSetChanged()
                 listadoRecetasAdapter.submitList(response.body())
             }
 
